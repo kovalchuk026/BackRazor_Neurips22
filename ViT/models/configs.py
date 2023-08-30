@@ -46,7 +46,7 @@ def get_b16_config():
     config.representation_size = None
     return config
 
-def get_b16_config():
+def get_ti16_config():
     """Returns the ViT-B/16 configuration."""
     config = ml_collections.ConfigDict()
     config.patches = ml_collections.ConfigDict({'size': (16, 16)})
