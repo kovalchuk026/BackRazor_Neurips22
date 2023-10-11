@@ -361,6 +361,7 @@ def main():
              format(args.dataset, len(train_loader.dataset), len(val_loader.dataset)))
     # Training
     # Prepare dataset
+    model.half()
     train(args, model, train_loader, val_loader, test_loader, log, writer)
 
 
