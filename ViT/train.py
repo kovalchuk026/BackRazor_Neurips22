@@ -364,8 +364,8 @@ def main():
     # Training
     # Prepare dataset
     model.half()
-    with autocast():
-        train(args, model, train_loader, val_loader, test_loader, log, writer)
+    torch.cuda.amp.autocast(True)
+    train(args, model, train_loader, val_loader, test_loader, log, writer)
 
 
 if __name__ == "__main__":
