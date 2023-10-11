@@ -153,12 +153,11 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
             x, y = batch
 
             # set_trace()
-            with autocast(device_type="cuda"): 
-                if "resnet" in args.model_type:
-                    pred = model(x)
-                    loss = nn.CrossEntropyLoss()(pred, y)
-                else:
-                    loss = model(x, y)
+            if "resnet" in args.model_type:
+                pred = model(x)
+                loss = nn.CrossEntropyLoss()(pred, y)
+            else:
+                loss = model(x, y)
 
             if args.gradient_accumulation_steps > 1:
                 loss = loss / args.gradient_accumulation_steps
@@ -364,7 +363,6 @@ def main():
              format(args.dataset, len(train_loader.dataset), len(val_loader.dataset)))
     # Training
     # Prepare dataset
-    model.half()
     train(args, model, train_loader, val_loader, test_loader, log, writer)
 
 
