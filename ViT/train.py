@@ -7,6 +7,8 @@ import argparse
 
 from datetime import timedelta
 
+from  torch.cuda.amp import autocast
+
 import torch
 import torch.distributed as dist
 
