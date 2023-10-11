@@ -363,7 +363,7 @@ def main():
              format(args.dataset, len(train_loader.dataset), len(val_loader.dataset)))
     # Training
     # Prepare dataset
-    model.float16()
+    model.half()
     torch.cuda.amp.autocast(True)
     train(args, model, train_loader, val_loader, test_loader, log, writer)
 
