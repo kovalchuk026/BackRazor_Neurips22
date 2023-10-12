@@ -190,7 +190,8 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                 if global_step % args.eval_every == 0:
                     model2 = model
                     model2.half()
-                    accuracy = valid(args, model2, writer, val_loader, global_step, log)
+                    with autocast():
+                        accuracy = valid(args, model2, writer, val_loader, global_step, log)
                 if global_step % args.eval_every == 0 and args.local_rank in [-1, 0]:
                     save_model(args, model, log)
                     model.train()
