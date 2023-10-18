@@ -188,10 +188,7 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                     writer.add_scalar("train/loss", scalar_value=losses.val, global_step=global_step)
                     writer.add_scalar("train/lr", scalar_value=scheduler.get_lr()[0], global_step=global_step)
                 if global_step % args.eval_every == 0:
-                    model2 = model
-                    model2.half()
-                    with autocast():
-                        accuracy = valid(args, model2, writer, val_loader, global_step, log)
+                    accuracy = valid(args, model, writer, val_loader, global_step, log)
                 if global_step % args.eval_every == 0 and args.local_rank in [-1, 0]:
                     save_model(args, model, log)
                     model.train()
