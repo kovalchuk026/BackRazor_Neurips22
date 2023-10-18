@@ -18,7 +18,7 @@ from ViT.utils.scheduler import WarmupLinearSchedule, WarmupCosineSchedule
 from ViT.utils.data_utils import get_loader
 from ViT.utils.utils import *
 from ViT.utils.memory_cost_profiler import profile_memory_cost
-
+from torch.nn.utils.prune import l1_unstructured
 
 import time
 import mesa as ms
@@ -180,7 +180,9 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                 optimizer.step()
                 optimizer.zero_grad()
                 global_step += 1
-
+                #checkpoint
+                for layer in model.transformer.encoder.layer:
+                    print("layer")
                 if global_step % 50 == 0:
                     log.info("Training ({}/{} Steps)\t(loss={:2.5f})\tData time={:.2f}({:.2f})\tBatch time={:.2f}({:.2f})\tMemory={:.1f}({:.1f})".format(
                         global_step, t_total, losses.val, data_time.val, data_time.avg, batch_time.val, batch_time.avg, memory_meter.val, memory_meter.avg))
