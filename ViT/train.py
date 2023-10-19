@@ -181,8 +181,9 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                 optimizer.zero_grad()
                 global_step += 1
                 #checkpoint
-                for layer in model.transformer.encoder.layer:
-                    print("layer")
+                for layer in model.module.transformer.encoder.layer:
+                  l1_unstructured(layer.ffn.fc1, "weight", 0.1)
+                  l1_unstructured(layer.ffn.fc2, "weight", 0.1)
                 if global_step % 50 == 0:
                     log.info("Training ({}/{} Steps)\t(loss={:2.5f})\tData time={:.2f}({:.2f})\tBatch time={:.2f}({:.2f})\tMemory={:.1f}({:.1f})".format(
                         global_step, t_total, losses.val, data_time.val, data_time.avg, batch_time.val, batch_time.avg, memory_meter.val, memory_meter.avg))
