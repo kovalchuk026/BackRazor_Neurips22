@@ -18,7 +18,7 @@ from ViT.utils.scheduler import WarmupLinearSchedule, WarmupCosineSchedule
 from ViT.utils.data_utils import get_loader
 from ViT.utils.utils import *
 from ViT.utils.memory_cost_profiler import profile_memory_cost
-from torch.nn.utils.prune import l1_unstructured
+from torch.nn.utils.prune import l1_unstructured, ln_structured
 
 import time
 import mesa as ms
