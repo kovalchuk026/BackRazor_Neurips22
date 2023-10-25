@@ -180,12 +180,6 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                 optimizer.step()
                 optimizer.zero_grad()
                 global_step += 1
-                #checkpoint
-                for layer in model.module.transformer.encoder.layer:
-                  l1_unstructured(layer.ffn.fc1, "weight", 0.1)
-                  l1_unstructured(layer.ffn.fc2, "weight", 0.1)
-                  #ln_structured(layer.ffn.fc1, name="weight", amount=0.1, n=2, dim=0)
-                  #ln_structured(layer.ffn.fc2, name="weight", amount=0.1, n=2, dim=0)
                 if global_step % 50 == 0:
                     log.info("Training ({}/{} Steps)\t(loss={:2.5f})\tData time={:.2f}({:.2f})\tBatch time={:.2f}({:.2f})\tMemory={:.1f}({:.1f})".format(
                         global_step, t_total, losses.val, data_time.val, data_time.avg, batch_time.val, batch_time.avg, memory_meter.val, memory_meter.avg))
@@ -193,6 +187,9 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                     writer.add_scalar("train/loss", scalar_value=losses.val, global_step=global_step)
                     writer.add_scalar("train/lr", scalar_value=scheduler.get_lr()[0], global_step=global_step)
                 if global_step % args.eval_every == 0:
+                    for layer in model.module.transformer.encoder.layer:
+                      l1_unstructured(layer.ffn.fc1, "weight", 0.05)
+                      l1_unstructured(layer.ffn.fc2, "weight", 0.05)
                     accuracy = valid(args, model, writer, val_loader, global_step, log)
                 if global_step % args.eval_every == 0 and args.local_rank in [-1, 0]:
                     save_model(args, model, log)
