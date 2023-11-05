@@ -18,7 +18,6 @@ from ViT.utils.scheduler import WarmupLinearSchedule, WarmupCosineSchedule
 from ViT.utils.data_utils import get_loader
 from ViT.utils.utils import *
 from ViT.utils.memory_cost_profiler import profile_memory_cost
-from torch.nn.utils.prune import l1_unstructured, ln_structured
 
 import time
 import mesa as ms
@@ -187,9 +186,6 @@ def train(args, model, train_loader, val_loader, test_loader, log, writer):
                     writer.add_scalar("train/loss", scalar_value=losses.val, global_step=global_step)
                     writer.add_scalar("train/lr", scalar_value=scheduler.get_lr()[0], global_step=global_step)
                 if global_step % args.eval_every == 0:
-                    for layer in model.module.transformer.encoder.layer:
-                      l1_unstructured(layer.ffn.fc1, "weight", 0.05)
-                      l1_unstructured(layer.ffn.fc2, "weight", 0.05)
                     accuracy = valid(args, model, writer, val_loader, global_step, log)
                 if global_step % args.eval_every == 0 and args.local_rank in [-1, 0]:
                     save_model(args, model, log)
